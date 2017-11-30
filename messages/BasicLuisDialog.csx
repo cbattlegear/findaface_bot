@@ -80,7 +80,7 @@ public class BasicLuisDialog : LuisDialog<object>
 
         foreach (dynamic picture in picturequery)
         {
-            Console.WriteLine(picture.faceThumbUrl);
+            await context.PostAsync(picture.faceThumbUrl);
         }
     }
 }
