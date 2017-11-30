@@ -32,7 +32,7 @@ public class BasicLuisDialog : LuisDialog<object>
             var our_gender = "";
             foreach(var value in gender.Resolution.Values)
             {
-                our_gender = value;
+                our_gender = value.ToString();
             }
             await context.PostAsync($"You sent the Gender: {our_gender}");
         }
