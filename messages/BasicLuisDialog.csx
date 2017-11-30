@@ -12,8 +12,8 @@ using Microsoft.Azure.Documents.Client;
 [Serializable]
 public class BasicLuisDialog : LuisDialog<object>
 {
-    private const string EndpointUrl = Utils.GetAppSetting("CosmosEndpoint");
-    private const string PrimaryKey = Utils.GetAppSetting("CosmosPrimaryKey");
+    private string EndpointUrl = Utils.GetAppSetting("CosmosEndpoint");
+    private string PrimaryKey = Utils.GetAppSetting("CosmosPrimaryKey");
     private DocumentClient client;
     public BasicLuisDialog() : base(new LuisService(new LuisModelAttribute(Utils.GetAppSetting("LuisAppId"), Utils.GetAppSetting("LuisAPIKey"))))
     {
@@ -47,7 +47,7 @@ public class BasicLuisDialog : LuisDialog<object>
             try
             {
                 GetStartedDemo().Wait();
-                ExecuteSimpleQuery(database_name, collection_name);
+                ExecuteSimpleQuery(context, database_name, collection_name);
             }
             catch (DocumentClientException de)
             {
@@ -68,7 +68,7 @@ public class BasicLuisDialog : LuisDialog<object>
         this.client = new DocumentClient(new Uri(EndpointUrl), PrimaryKey);
     }
 
-    private void ExecuteSimpleQuery(string databaseName, string collectionName)
+    private async Task ExecuteSimpleQuery(IDialogContext context, string databaseName, string collectionName)
     {
         // Set some common query options
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
