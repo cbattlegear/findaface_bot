@@ -27,6 +27,10 @@ public class BasicLuisDialog : LuisDialog<object>
     public async Task FindPicture(IDialogContext context, LuisResult result)
     {
         await context.PostAsync($"You have reached the Find Picture intent. You said: {result.Query}"); //
+        EntityRecommendation gender;
+        if(result.TryFindEntity("gender", out gender)) {
+            await context.PostAsync($"You sent the {gender.Entity}");
+        }
         context.Wait(MessageReceived);
     }
 }
