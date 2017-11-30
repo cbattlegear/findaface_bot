@@ -30,9 +30,9 @@ public class BasicLuisDialog : LuisDialog<object>
         EntityRecommendation gender;
         if(result.TryFindEntity("gender", out gender)) {
             var our_gender = "";
-            foreach(var value in gender.Resolution.Values)
+            foreach (var value in gender.Resolution.Values)
             {
-                our_gender = value.toString();
+                our_gender = value.ToString();
             }
             await context.PostAsync($"You sent the Gender: {our_gender}");
         }
