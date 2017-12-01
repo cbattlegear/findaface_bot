@@ -41,7 +41,7 @@ public class BasicLuisDialog : LuisDialog<object>
             char[] charsToTrim = { '[', ' ', ']', '"' };
             foreach (var value in gender.Resolution.Values)
             {
-                our_gender = Regex.Replace(our_gender, @"[^\u0000-\u007F]+", string.Empty);
+                our_gender = StripIncompatableQuotes(our_gender);
                 our_gender = value.ToString().Trim(charsToTrim);
             }
             await context.PostAsync($"You sent the Gender: {our_gender}");
@@ -89,4 +89,13 @@ public class BasicLuisDialog : LuisDialog<object>
 
         return heroCard.ToAttachment();
     }
+
+    public static string StripIncompatableQuotes(string s)
+    {
+        if (!string.IsNullOrEmpty(s))
+            return s.Replace('\u2018', '\'').Replace('\u2019', '\'').Replace('\u201c', '\"').Replace('\u201d', '\"');
+        else
+            return s;
+    }
+    
 }
