@@ -49,7 +49,7 @@ public class BasicLuisDialog : LuisDialog<object>
             dict.MoveNext();
             var valuesList = dict.Current;
 
-            foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties())
+            foreach (PropertyInfo propertyInfo in valuesList.GetType().GetProperties())
             {
                 await context.PostAsync($"You sent the Gender: {propertyInfo.ToString()}");
             }
