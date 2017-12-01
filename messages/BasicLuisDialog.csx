@@ -75,7 +75,7 @@ public class BasicLuisDialog : LuisDialog<object>
 
     private static Microsoft.Bot.Connector.Attachment GetThumbnailCard(string image_url)
     {
-        var heroCard = new ThumbnailCard
+        var heroCard = new HeroCard
         {
             Title = "BotFramework Thumbnail Card",
             Subtitle = "Your bots — wherever your users are talking",
