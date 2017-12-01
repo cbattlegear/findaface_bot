@@ -93,7 +93,7 @@ public class BasicLuisDialog : LuisDialog<object>
     public static string StripIncompatableQuotes(string s)
     {
         if (!string.IsNullOrEmpty(s))
-            return s.Replace('\u2018', '\'').Replace('\u2019', '\'').Replace('\u201c', '\"').Replace('\u201d', '\"');
+            return s.Replace('\u2018', String.Empty).Replace('\u2019', String.Empty).Replace('\u201c', String.Empty).Replace('\u201d', String.Empty);
         else
             return s;
     }
