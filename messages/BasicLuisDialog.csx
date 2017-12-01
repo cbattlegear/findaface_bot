@@ -45,15 +45,10 @@ public class BasicLuisDialog : LuisDialog<object>
             var our_gender = "";
             char[] charsToTrim = { '[', ' ', ']', '"' };
 
-            var dict = gender.Resolution.Values.GetEnumerator();
+            var dict = entity.Resolution.Values.GetEnumerator();
             dict.MoveNext();
-            var valuesList = dict.Current;
-            our_gender = valuesList.First().ToString();
-
-            foreach (PropertyInfo propertyInfo in valuesList.GetType().GetProperties())
-            {
-                await context.PostAsync($"You sent the Gender: {propertyInfo.ToString()}");
-            }
+            var valuesList = (List<object>)dict.Current;
+            var canonicalForm = (string)valuesList[0];
 
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
