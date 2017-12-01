@@ -3,6 +3,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.Dialogs;
@@ -37,9 +38,10 @@ public class BasicLuisDialog : LuisDialog<object>
         EntityRecommendation gender;
         if(result.TryFindEntity("gender", out gender)) {
             var our_gender = "";
-            char[] charsToTrim = { '[', ' ', ']', '"', '”', '“' };
+            char[] charsToTrim = { '[', ' ', ']', '"' };
             foreach (var value in gender.Resolution.Values)
             {
+                our_gender = Regex.Replace(our_gender, @"[^\u0000-\u007F]+", string.Empty);
                 our_gender = value.ToString().Trim(charsToTrim);
             }
             await context.PostAsync($"You sent the Gender: {our_gender}");
