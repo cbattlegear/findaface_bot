@@ -45,7 +45,9 @@ public class BasicLuisDialog : LuisDialog<object>
             var our_gender = "";
             char[] charsToTrim = { '[', ' ', ']', '"' };
 
-            our_gender = gender.Resolution["values"].GetType().ToString();
+            JArray mid = gender.Resolution["values"];
+
+            our_gender = mid[0].ToString();
 
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
