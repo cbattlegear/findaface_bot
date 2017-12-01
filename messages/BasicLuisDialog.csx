@@ -44,7 +44,6 @@ public class BasicLuisDialog : LuisDialog<object>
 
             try
             {
-                List<string> thumbnails = new List<string>();
                 Cosmos c = new Cosmos();
                 c.OpenConnection().Wait();
                 List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.gender = 'female'");
