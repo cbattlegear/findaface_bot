@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -48,12 +49,9 @@ public class BasicLuisDialog : LuisDialog<object>
             dict.MoveNext();
             var valuesList = dict.Current;
 
-            foreach (JObject content in valuesList.Children<JObject>())
+            foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties())
             {
-                foreach (JProperty prop in content.Properties())
-                {
-                    our_gender = prop.Value.ToString();
-                }
+                await context.PostAsync($"You sent the Gender: {propertyInfo.ToString()}");
             }
 
             await context.PostAsync($"You sent the Gender: {our_gender}");
