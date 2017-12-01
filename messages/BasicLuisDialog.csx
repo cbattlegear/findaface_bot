@@ -45,7 +45,6 @@ public class BasicLuisDialog : LuisDialog<object>
                 our_gender = our_gender.Trim(charsToTrim);
                 await context.PostAsync(value.ToString());
             }
-            our_gender = gender.Resolution.Values[0].toString();
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
             try
