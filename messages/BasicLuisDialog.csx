@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.Dialogs;
@@ -43,9 +44,12 @@ public class BasicLuisDialog : LuisDialog<object>
 
             try
             {
+                List<string> thumbnails = new List<string>();
                 Cosmos c = new Cosmos();
                 c.OpenConnection().Wait();
-                c.ExecuteSimpleQuery(context, "c.faceAttributes.gender = 'female'");
+                c.ExecuteSimpleQuery("c.faceAttributes.gender = 'female'", out thumbnails);
+
+                await context.PostAsync(String.Join("\n", thumbnails));
             }
             catch (DocumentClientException de)
             {

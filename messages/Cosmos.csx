@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.Dialogs;
@@ -27,7 +28,7 @@ public class Cosmos
         this.client = new DocumentClient(new Uri(EndpointUrl), PrimaryKey);
     }
 
-    public async Task ExecuteSimpleQuery(IDialogContext context, string whereclause)
+    public async Task ExecuteSimpleQuery(string whereclause, out List<string> thumbnails)
     {
         // Set some common query options
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
@@ -39,7 +40,7 @@ public class Cosmos
 
         foreach (dynamic picture in picturequery)
         {
-            await context.PostAsync(picture.faceThumbUrl);
+            thumbnails.Add(picture.faceThumbUrl);
         }
     }
 }
