@@ -45,10 +45,7 @@ public class BasicLuisDialog : LuisDialog<object>
             var our_gender = "";
             char[] charsToTrim = { '[', ' ', ']', '"' };
 
-            var dict = entity.Resolution.Values.GetEnumerator();
-            dict.MoveNext();
-            var valuesList = (List<object>)dict.Current;
-            var canonicalForm = (string)valuesList[0];
+            string our_gender = ((List<object>)gender.Resolution["values"]).Cast<string>().F??irstOrDefault();
 
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
