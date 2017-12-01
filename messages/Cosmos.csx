@@ -33,7 +33,7 @@ public class Cosmos
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
 
         IQueryable<dynamic> picturequery = this.client.CreateDocumentQuery<dynamic>(
-            UriFactory.CreateDocumentCollectionUri(databaseName, collectionName),
+            UriFactory.CreateDocumentCollectionUri(database_name, collection_name),
             "SELECT TOP 5 * FROM c WHERE " + whereclause,
             queryOptions);
 
