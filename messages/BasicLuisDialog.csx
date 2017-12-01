@@ -94,7 +94,7 @@ public class BasicLuisDialog : LuisDialog<object>
                 Cosmos c = new Cosmos();
                 c.OpenConnection().Wait();
                 
-                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.hair.hairColor[0].color = '" + our_haircolor + "'", context);
+                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.hair.hairColor[0].color = '" + our_haircolor + "' and c.faceAttributes.hair.hairColor[0].confidence > 0.9", context);
 
                 foreach (string thumbnail in thumbnails)
                 {
