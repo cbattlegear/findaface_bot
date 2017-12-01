@@ -41,8 +41,8 @@ public class BasicLuisDialog : LuisDialog<object>
             char[] charsToTrim = { '[', ' ', ']', '"' };
             foreach (var value in gender.Resolution.Values)
             {
-                our_gender = StripIncompatableQuotes(value);
-                our_gender = our_gender.ToString().Trim(charsToTrim);
+                our_gender = StripIncompatableQuotes(value.ToString());
+                our_gender = our_gender.Trim(charsToTrim);
             }
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
