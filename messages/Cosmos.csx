@@ -22,12 +22,12 @@ public class Cosmos
     {
     }
 
-    private async Task OpenConnection()
+    public async Task OpenConnection()
     {
         this.client = new DocumentClient(new Uri(EndpointUrl), PrimaryKey);
     }
 
-    private async Task ExecuteSimpleQuery(IDialogContext context, string whereclause)
+    public async Task ExecuteSimpleQuery(IDialogContext context, string whereclause)
     {
         // Set some common query options
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
