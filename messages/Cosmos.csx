@@ -28,8 +28,9 @@ public class Cosmos
         this.client = new DocumentClient(new Uri(EndpointUrl), PrimaryKey);
     }
 
-    public async Task ExecuteSimpleQuery(string whereclause, out List<string> thumbnails)
+    public async Task<List<string>> ExecuteSimpleQuery(string whereclause)
     {
+        List<string> thumbnails = new List<string>();
         // Set some common query options
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
 
@@ -42,5 +43,7 @@ public class Cosmos
         {
             thumbnails.Add(picture.faceThumbUrl);
         }
+
+        return thumbnails;
     }
 }
