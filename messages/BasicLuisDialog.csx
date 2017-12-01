@@ -92,7 +92,7 @@ public class BasicLuisDialog : LuisDialog<object>
             {
                 Cosmos c = new Cosmos();
                 c.OpenConnection().Wait();
-                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.gender = '" + our_gender + "'", context);
+                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.gender = '" + our_haircolor + "'", context);
 
                 foreach (string thumbnail in thumbnails)
                 {
