@@ -48,7 +48,15 @@ public class BasicLuisDialog : LuisDialog<object>
                 c.OpenConnection().Wait();
                 List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.gender = 'female'", context);
 
-                await context.PostAsync(String.Join("\n", thumbnails));
+                foreach(string thumbnail in thumbnails)
+                {
+                    var message = context.MakeMessage();
+
+                    var attachment = await GetThumbnailCard(thumbnail);
+                    message.Attachments.Add(attachment);
+
+                    await context.PostAsync(message);
+                }
             }
             catch (DocumentClientException de)
             {
@@ -62,5 +70,19 @@ public class BasicLuisDialog : LuisDialog<object>
             }
         }
         context.Wait(MessageReceived);
+    }
+
+    private static Task<Attachment> GetThumbnailCard(string image_url)
+    {
+        var heroCard = new ThumbnailCard
+        {
+            Title = "BotFramework Thumbnail Card",
+            Subtitle = "Your bots — wherever your users are talking",
+            Text = "Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.",
+            Images = new List<CardImage> { new CardImage(image_url) },
+            Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "Get Started", value: "https://docs.microsoft.com/bot-framework") }
+        };
+
+        return heroCard.ToAttachment();
     }
 }
