@@ -43,7 +43,7 @@ public class BasicLuisDialog : LuisDialog<object>
             var dict = gender.Resolution.Values.GetEnumerator();
             dict.MoveNext();
             var valuesList = (List<object>)dict.Current;
-            var our_gender = (string)valuesList[0];
+            our_gender = (string)valuesList[0];
 
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
