@@ -45,7 +45,7 @@ public class BasicLuisDialog : LuisDialog<object>
             var our_gender = "";
             char[] charsToTrim = { '[', ' ', ']', '"' };
 
-            JArray mid = gender.Resolution["values"];
+            JArray mid = (JArray)gender.Resolution["values"];
 
             our_gender = mid[0].ToString();
 
