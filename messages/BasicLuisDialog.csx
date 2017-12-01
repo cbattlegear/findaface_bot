@@ -72,7 +72,7 @@ public class BasicLuisDialog : LuisDialog<object>
         context.Wait(MessageReceived);
     }
 
-    private static Task<Attachment> GetThumbnailCard(string image_url)
+    private static Task<Microsoft.Bot.Connector.Attachment> GetThumbnailCard(string image_url)
     {
         var heroCard = new ThumbnailCard
         {
