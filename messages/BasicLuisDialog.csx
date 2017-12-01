@@ -37,7 +37,7 @@ public class BasicLuisDialog : LuisDialog<object>
         EntityRecommendation gender;
         if(result.TryFindEntity("gender", out gender)) {
             var our_gender = "";
-            char[] charsToTrim = { '[', ' ', ']', '"' };
+            char[] charsToTrim = { '[', ' ', ']', '"', '”', '“' };
             foreach (var value in gender.Resolution.Values)
             {
                 our_gender = value.ToString().Trim(charsToTrim);
