@@ -39,12 +39,12 @@ public class BasicLuisDialog : LuisDialog<object>
         if(result.TryFindEntity("gender", out gender)) {
             var our_gender = "";
             char[] charsToTrim = { '[', ' ', ']', '"' };
-            foreach (var value in gender.Resolution.Values)
-            {
-                our_gender = StripIncompatableQuotes(value.ToString());
-                our_gender = our_gender.Trim(charsToTrim);
-                await context.PostAsync(value.ToString());
-            }
+
+            var dict = gender.Resolution.Values.GetEnumerator();
+            dict.MoveNext();
+            var valuesList = (List<object>)dict.Current;
+            var our_gender = (string)valuesList[0];
+
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
             try
