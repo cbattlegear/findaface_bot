@@ -41,7 +41,7 @@ public class BasicLuisDialog : LuisDialog<object>
             char[] charsToTrim = { '[', ' ', ']', '"' };
             foreach (var value in gender.Resolution.Values)
             {
-                our_gender = StripIncompatableQuotes(our_gender);
+                value = StripIncompatableQuotes(value);
                 our_gender = value.ToString().Trim(charsToTrim);
             }
             await context.PostAsync($"You sent the Gender: {our_gender}");
@@ -93,7 +93,7 @@ public class BasicLuisDialog : LuisDialog<object>
     public static string StripIncompatableQuotes(string s)
     {
         if (!string.IsNullOrEmpty(s))
-            return s.Replace('\u2018', String.Empty).Replace('\u2019', String.Empty).Replace('\u201c', String.Empty).Replace('\u201d', String.Empty);
+            return s.Replace('\u2018', '\'').Replace('\u2019', '\'').Replace('\u201c', '\"').Replace('\u201d', '\"');
         else
             return s;
     }
