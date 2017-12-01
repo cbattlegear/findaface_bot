@@ -1,3 +1,5 @@
+#load "Cosmos.csx"
+
 using System;
 using System.Threading.Tasks;
 
@@ -10,11 +12,9 @@ using Microsoft.Azure.Documents.Client;
 
 // For more information about this template visit http://aka.ms/azurebots-csharp-luis
 
+[Serializable]
 public class BasicLuisDialog : LuisDialog<object>
 {
-    private string EndpointUrl = Utils.GetAppSetting("CosmosEndpoint");
-    private string PrimaryKey = Utils.GetAppSetting("CosmosPrimaryKey");
-    private DocumentClient client;
     public BasicLuisDialog() : base(new LuisService(new LuisModelAttribute(Utils.GetAppSetting("LuisAppId"), Utils.GetAppSetting("LuisAPIKey"))))
     {
     }
@@ -41,13 +41,11 @@ public class BasicLuisDialog : LuisDialog<object>
             }
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
-            string database_name = "face_info";
-            string collection_name = "face_collection";
-
             try
             {
-                GetStartedDemo().Wait();
-                ExecuteSimpleQuery(context, database_name, collection_name);
+                Cosmos c = new Cosmos();
+                c.OpenConnection().Wait();
+                c.ExecuteSimpleQuery(context, "c.faceAttributes.gender = 'female'");
             }
             catch (DocumentClientException de)
             {
@@ -61,26 +59,5 @@ public class BasicLuisDialog : LuisDialog<object>
             }
         }
         context.Wait(MessageReceived);
-    }
-
-    private async Task GetStartedDemo()
-    {
-        this.client = new DocumentClient(new Uri(EndpointUrl), PrimaryKey);
-    }
-
-    private async Task ExecuteSimpleQuery(IDialogContext context, string databaseName, string collectionName)
-    {
-        // Set some common query options
-        FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
-
-        IQueryable<dynamic> picturequery = this.client.CreateDocumentQuery<dynamic>(
-            UriFactory.CreateDocumentCollectionUri(databaseName, collectionName),
-            "SELECT TOP 5 * FROM c WHERE c.faceAttributes.gender = 'female'",
-            queryOptions);
-
-        foreach (dynamic picture in picturequery)
-        {
-            await context.PostAsync(picture.faceThumbUrl);
-        }
     }
 }
