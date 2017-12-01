@@ -48,7 +48,7 @@ public class BasicLuisDialog : LuisDialog<object>
             var dict = gender.Resolution.Values.GetEnumerator();
             dict.MoveNext();
             var valuesList = dict.Current;
-            our_gender = valuesList.First.ToString();
+            our_gender = valuesList.First().ToString();
 
             foreach (PropertyInfo propertyInfo in valuesList.GetType().GetProperties())
             {
