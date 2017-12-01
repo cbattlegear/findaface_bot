@@ -37,9 +37,10 @@ public class BasicLuisDialog : LuisDialog<object>
         EntityRecommendation gender;
         if(result.TryFindEntity("gender", out gender)) {
             var our_gender = "";
+            char[] charsToTrim = { '[', ' ', ']', '"' };
             foreach (var value in gender.Resolution.Values)
             {
-                our_gender = value.ToString();
+                our_gender = value.ToString().Trim(charsToTrim);
             }
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
@@ -47,7 +48,7 @@ public class BasicLuisDialog : LuisDialog<object>
             {
                 Cosmos c = new Cosmos();
                 c.OpenConnection().Wait();
-                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.gender = 'female'", context);
+                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.gender = '" + our_gender + "'", context);
 
                 foreach(string thumbnail in thumbnails)
                 {
@@ -73,7 +74,7 @@ public class BasicLuisDialog : LuisDialog<object>
         context.Wait(MessageReceived);
     }
 
-    private static Microsoft.Bot.Connector.Attachment GetThumbnailCard(string image_url)
+    private static Microsoft.Bot.Connector.Attachment GetHeroCard(string image_url)
     {
         var heroCard = new HeroCard
         {

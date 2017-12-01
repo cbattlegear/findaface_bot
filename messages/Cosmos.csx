@@ -37,12 +37,12 @@ public class Cosmos
 
         IQueryable <dynamic> picturequery = this.client.CreateDocumentQuery<dynamic>(
         UriFactory.CreateDocumentCollectionUri(database_name, collection_name),
-        "SELECT TOP 5 * FROM c WHERE " + whereclause,
+        "SELECT TOP 3 * FROM c WHERE " + whereclause,
         queryOptions);
 
         foreach (dynamic picture in picturequery)
         {
-            thumbnails.Add(picture.faceThumbUrl);
+            thumbnails.Add(picture.faceUrl);
         }
 
         return thumbnails;
