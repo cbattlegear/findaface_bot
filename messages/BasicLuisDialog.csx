@@ -42,8 +42,15 @@ public class BasicLuisDialog : LuisDialog<object>
 
             var dict = gender.Resolution.Values.GetEnumerator();
             dict.MoveNext();
-            var valuesList = (string)dict.Current[0];
-            our_gender = valuesList;
+            var valuesList = dict.Current;
+
+            foreach (JObject content in valuesList.Children<JObject>())
+            {
+                foreach (JProperty prop in content.Properties())
+                {
+                    our_gender = prop.Value.ToString();
+                }
+            }
 
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
