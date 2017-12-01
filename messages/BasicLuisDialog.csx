@@ -53,7 +53,7 @@ public class BasicLuisDialog : LuisDialog<object>
                 {
                     var message = context.MakeMessage();
 
-                    var attachment = await GetThumbnailCard(thumbnail);
+                    var attachment = GetThumbnailCard(thumbnail);
                     message.Attachments.Add(attachment);
 
                     await context.PostAsync(message);
@@ -73,7 +73,7 @@ public class BasicLuisDialog : LuisDialog<object>
         context.Wait(MessageReceived);
     }
 
-    private static Task<Microsoft.Bot.Connector.Attachment> GetThumbnailCard(string image_url)
+    private static Microsoft.Bot.Connector.Attachment GetThumbnailCard(string image_url)
     {
         var heroCard = new ThumbnailCard
         {
