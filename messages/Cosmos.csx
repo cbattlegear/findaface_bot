@@ -29,23 +29,24 @@ public class Cosmos
         
     }
 
-    public async Task<List<string>> ExecuteSimpleQuery(string whereclause)
+    public async Task<List<string>> ExecuteSimpleQuery(string whereclause, IDialogContext context)
     {
         List<string> thumbnails = new List<string>();
         // Set some common query options
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
-
-        IQueryable<dynamic> picturequery = this.client.CreateDocumentQuery<dynamic>(
+        await context.PostAsync($"Getting ready to run query");
+        IQueryable <dynamic> picturequery = this.client.CreateDocumentQuery<dynamic>(
         UriFactory.CreateDocumentCollectionUri(database_name, collection_name),
         "SELECT TOP 5 * FROM c WHERE " + whereclause,
         queryOptions);
-
+        await context.PostAsync($"Query Ran");
 
         foreach (dynamic picture in picturequery)
         {
             thumbnails.Add(picture.faceThumbUrl);
+            await context.PostAsync($"picture added to list");
         }
-
+        await context.PostAsync($"Returning list");
         return thumbnails;
     }
 }
