@@ -74,6 +74,47 @@ public class BasicLuisDialog : LuisDialog<object>
                 Console.WriteLine("Error: {0}, Message: {1}", e.Message, baseException.Message);
             }
         }
+
+        EntityRecommendation haircolor;
+        if (result.TryFindEntity("haircolor", out haircolor))
+        {
+            var our_haircolor = "";
+            char[] charsToTrim = { '[', ' ', ']', '"' };
+            foreach (var value in haircolor.Resolution.Values)
+            {
+                our_haircolor = StripIncompatableQuotes(value.ToString());
+                our_haircolor = our_haircolor.Trim(charsToTrim);
+                await context.PostAsync(value.ToString());
+            }
+            await context.PostAsync($"You sent the Hair Color: {our_haircolor}");
+
+            try
+            {
+                Cosmos c = new Cosmos();
+                c.OpenConnection().Wait();
+                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.gender = '" + our_gender + "'", context);
+
+                foreach (string thumbnail in thumbnails)
+                {
+                    var message = context.MakeMessage();
+
+                    var attachment = GetHeroCard(thumbnail);
+                    message.Attachments.Add(attachment);
+
+                    await context.PostAsync(message);
+                }
+            }
+            catch (DocumentClientException de)
+            {
+                Exception baseException = de.GetBaseException();
+                Console.WriteLine("{0} error occurred: {1}, Message: {2}", de.StatusCode, de.Message, baseException.Message);
+            }
+            catch (Exception e)
+            {
+                Exception baseException = e.GetBaseException();
+                Console.WriteLine("Error: {0}, Message: {1}", e.Message, baseException.Message);
+            }
+        }
         context.Wait(MessageReceived);
     }
 
