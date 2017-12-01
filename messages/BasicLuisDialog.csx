@@ -84,19 +84,17 @@ public class BasicLuisDialog : LuisDialog<object>
         {
             var our_haircolor = "";
             char[] charsToTrim = { '[', ' ', ']', '"' };
-            foreach (var value in haircolor.Resolution.Values)
-            {
-                our_haircolor = StripIncompatableQuotes(value.ToString());
-                our_haircolor = our_haircolor.Trim(charsToTrim);
-                await context.PostAsync(value.ToString());
-            }
+            JArray mid = (JArray)haircolor.Resolution["values"];
+
+            our_haircolor = mid[0].ToString();
             await context.PostAsync($"You sent the Hair Color: {our_haircolor}");
 
             try
             {
                 Cosmos c = new Cosmos();
                 c.OpenConnection().Wait();
-                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.gender = '" + our_haircolor + "'", context);
+                
+                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.hair.hairColor[0].color = '" + our_haircolor + "'", context);
 
                 foreach (string thumbnail in thumbnails)
                 {
