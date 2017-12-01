@@ -54,7 +54,7 @@ public class BasicLuisDialog : LuisDialog<object>
                 {
                     var message = context.MakeMessage();
 
-                    var attachment = GetThumbnailCard(thumbnail);
+                    var attachment = GetHeroCard(thumbnail);
                     message.Attachments.Add(attachment);
 
                     await context.PostAsync(message);
