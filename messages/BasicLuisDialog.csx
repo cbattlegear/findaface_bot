@@ -251,7 +251,7 @@ public class BasicLuisDialog : LuisDialog<object>
     {
         var heroCard = new HeroCard
         {
-            Subtitle = "Face Id: " + id,
+            Title = "Face Id: " + id,
             Images = new List<CardImage> { new CardImage(image_url) },
             Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "View Full Picture", value: image_url) }
         };
