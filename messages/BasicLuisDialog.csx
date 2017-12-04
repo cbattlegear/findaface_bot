@@ -226,7 +226,7 @@ public class BasicLuisDialog : LuisDialog<object>
             {
                 await context.PostAsync($"Here's a few people I found that look like what you are asking for.");
                 var message = context.MakeMessage();
-                foreach (string thumbnail in thumbnails)
+                foreach (Picture thumbnail in thumbnails)
                 {
                     var attachment = GetHeroCard(thumbnail.faceUrl, thumbnail.faceId);
                     message.Attachments.Add(attachment);
