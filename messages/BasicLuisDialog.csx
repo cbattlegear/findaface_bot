@@ -104,7 +104,7 @@ public class BasicLuisDialog : LuisDialog<object>
             var our_age = "";
             //JArray mid = (JArray)age.Resolution["values"];
 
-            our_age = age.Resolution.ToString();
+            our_age = age.Resolution["value"].ToString()
 
             //our_age = mid[0].ToString();
             await context.PostAsync($"You sent the Age: {our_age}");
