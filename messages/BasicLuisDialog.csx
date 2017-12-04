@@ -39,8 +39,6 @@ public class BasicLuisDialog : LuisDialog<object>
     [LuisIntent("Find Picture")]
     public async Task FindPicture(IDialogContext context, LuisResult result)
     {
-        await context.PostAsync($"You have reached the Find Picture intent. You said: {result.Query}");
-
         string query_build = "";
         bool is_first = true;
         EntityRecommendation gender;
@@ -144,6 +142,23 @@ public class BasicLuisDialog : LuisDialog<object>
         if (result.TryFindEntity("glasses", out glasses))
         {
             string query = "c.faceAttributes.glasses <> 'NoGlasses'";
+            if (is_first)
+            {
+                query_build += query;
+                is_first = false;
+            }
+            else
+            {
+                query = " and " + query;
+                query_build += query;
+            }
+
+        }
+
+        EntityRecommendation sunglasses;
+        if (result.TryFindEntity("sunglasses", out sunglasses))
+        {
+            string query = "c.faceAttributes.glasses = 'Sunglasses'";
             if (is_first)
             {
                 query_build += query;
