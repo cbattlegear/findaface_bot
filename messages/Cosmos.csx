@@ -61,11 +61,11 @@ public class Cosmos
         Random rand = new Random();
         
         // 1st Picture
-        thumbnails.Add(all_pictures[rand(0, all_pictures.Count() - 1)].faceUrl);
+        thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)].faceUrl);
         // 2nd Picture
-        thumbnails.Add(all_pictures[rand(0, all_pictures.Count() - 1)].faceUrl);
+        thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)].faceUrl);
         // 3rd Picture
-        thumbnails.Add(all_pictures[rand(0, all_pictures.Count() - 1)].faceUrl);
+        thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)].faceUrl);
 
         return thumbnails;
     }
