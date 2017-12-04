@@ -40,10 +40,10 @@ public class Cosmos
         string query = "";
         if(whereclause == "")
         {
-            query = "SELECT TOP 3 * FROM c";
+            query = "SELECT TOP 200 * FROM c";
         } else
         {
-            query = "SELECT TOP 3 * FROM c WHERE " + whereclause;
+            query = "SELECT TOP 200 * FROM c WHERE " + whereclause;
         }
 
         IQueryable<dynamic> picturequery = this.client.CreateDocumentQuery<dynamic>(
@@ -51,10 +51,21 @@ public class Cosmos
         query,
         queryOptions);
 
+        List<Picture> all_pictures = new List<Picture>();
+
         foreach (dynamic picture in picturequery)
         {
-            thumbnails.Add(picture.faceUrl);
+            all_pictures.Add(new Picture(picture.faceId, picture.faceUrl, picture.faceThumbUrl));
         }
+
+        Random rand = new Random();
+        
+        // 1st Picture
+        thumbnails.Add(all_pictures[rand(0, all_pictures.Count() - 1)].faceUrl);
+        // 2nd Picture
+        thumbnails.Add(all_pictures[rand(0, all_pictures.Count() - 1)].faceUrl);
+        // 3rd Picture
+        thumbnails.Add(all_pictures[rand(0, all_pictures.Count() - 1)].faceUrl);
 
         return thumbnails;
     }
