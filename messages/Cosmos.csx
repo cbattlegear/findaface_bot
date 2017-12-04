@@ -32,7 +32,7 @@ public class Cosmos
         
     }
 
-    public async Task<List<string>> ExecuteSimpleQuery(string whereclause, IDialogContext context)
+    public async Task<List<string>> ExecuteSimpleQuery(string whereclause, int numberofpictures = 0)
     {
         List<string> thumbnails = new List<string>();
         // Set some common query options
@@ -59,13 +59,11 @@ public class Cosmos
         }
 
         Random rand = new Random();
-        
-        // 1st Picture
-        thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)].faceUrl);
-        // 2nd Picture
-        thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)].faceUrl);
-        // 3rd Picture
-        thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)].faceUrl);
+
+        for (int i = 0; i < numberofpictures; i++)
+        {
+            thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)].faceUrl);
+        }
 
         return thumbnails;
     }

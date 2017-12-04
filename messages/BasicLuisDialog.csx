@@ -39,6 +39,20 @@ public class BasicLuisDialog : LuisDialog<object>
     [LuisIntent("Find Picture")]
     public async Task FindPicture(IDialogContext context, LuisResult result)
     {
+        int numberofpictures = 1;
+        EntityRecommendation number;
+        if (result.TryFindEntity("builtin.number", out number))
+        {
+            var our_number = "";
+            //JArray mid = (JArray)age.Resolution["values"];
+
+            our_number = number.Resolution["value"].ToString();
+
+            //our_age = mid[0].ToString();
+            await context.PostAsync($"You want {our_number} pictures");
+            numberofpictures = Convert.ToInt32(our_number);
+        }
+
         string query_build = "";
         bool is_first = true;
         EntityRecommendation gender;
@@ -193,14 +207,20 @@ public class BasicLuisDialog : LuisDialog<object>
         {
             Cosmos c = new Cosmos();
             c.OpenConnection().Wait();
-            List<string> thumbnails = await c.ExecuteSimpleQuery(query_build, context);
-            var message = context.MakeMessage();
-            foreach (string thumbnail in thumbnails)
+            List<string> thumbnails = await c.ExecuteSimpleQuery(query_build, numberofpictures);
+            if(thumbnails.Count() == 0)
             {
-                var attachment = GetHeroCard(thumbnail);
-                message.Attachments.Add(attachment);
+                await context.PostAsync($"I didn't find any pictures with those attributes, sorry!");
+            } else
+            {
+                var message = context.MakeMessage();
+                foreach (string thumbnail in thumbnails)
+                {
+                    var attachment = GetHeroCard(thumbnail);
+                    message.Attachments.Add(attachment);
+                }
+                await context.PostAsync(message);
             }
-            await context.PostAsync(message);
         }
         catch (DocumentClientException de)
         {
@@ -219,11 +239,8 @@ public class BasicLuisDialog : LuisDialog<object>
     {
         var heroCard = new HeroCard
         {
-            Title = "BotFramework Thumbnail Card",
-            Subtitle = "Your bots — wherever your users are talking",
-            Text = "Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.",
             Images = new List<CardImage> { new CardImage(image_url) },
-            Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "Get Started", value: "https://docs.microsoft.com/bot-framework") }
+            Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "View Full Picture", value: image_url) }
         };
 
         return heroCard.ToAttachment();
