@@ -138,6 +138,40 @@ public class BasicLuisDialog : LuisDialog<object>
 
         }
 
+        EntityRecommendation glasses;
+        if (result.TryFindEntity("glasses", out glasses))
+        {
+            string query = "c.faceAttributes.glasses <> 'NoGlasses'";
+            if (is_first)
+            {
+                query_build += query;
+                is_first = false;
+            }
+            else
+            {
+                query = " and " + query;
+                query_build += query;
+            }
+
+        }
+
+        EntityRecommendation smile;
+        if (result.TryFindEntity("smile", out smile))
+        {
+            string query = "c.faceAttributes.smile >= 0.9";
+            if (is_first)
+            {
+                query_build += query;
+                is_first = false;
+            }
+            else
+            {
+                query = " and " + query;
+                query_build += query;
+            }
+
+        }
+
         try
         {
             Cosmos c = new Cosmos();
