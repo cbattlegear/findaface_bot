@@ -46,8 +46,6 @@ public class BasicLuisDialog : LuisDialog<object>
         EntityRecommendation gender;
         if(result.TryFindEntity("gender", out gender)) {
             var our_gender = "";
-            char[] charsToTrim = { '[', ' ', ']', '"' };
-
             JArray mid = (JArray)gender.Resolution["values"];
 
             our_gender = mid[0].ToString();
@@ -61,7 +59,6 @@ public class BasicLuisDialog : LuisDialog<object>
         if (result.TryFindEntity("haircolor", out haircolor))
         {
             var our_haircolor = "";
-            char[] charsToTrim = { '[', ' ', ']', '"' };
             JArray mid = (JArray)haircolor.Resolution["values"];
 
             our_haircolor = mid[0].ToString();
@@ -83,7 +80,6 @@ public class BasicLuisDialog : LuisDialog<object>
         if (result.TryFindEntity("emotion", out emotion))
         {
             var our_emotion = "";
-            char[] charsToTrim = { '[', ' ', ']', '"' };
             JArray mid = (JArray)emotion.Resolution["values"];
 
             our_emotion = mid[0].ToString();
@@ -106,7 +102,6 @@ public class BasicLuisDialog : LuisDialog<object>
         if (result.TryFindEntity("age", out age))
         {
             var our_age = "";
-            char[] charsToTrim = { '[', ' ', ']', '"' };
             JArray mid = (JArray)age.Resolution["values"];
 
             our_age = mid[0].ToString();
