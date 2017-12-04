@@ -45,12 +45,12 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
                         var newMembers = update.MembersAdded?.Where(t => t.Id != activity.Recipient.Id);
                         foreach (var newMember in newMembers)
                         {
-                            reply.Text = "Welcome";
-                            if (!string.IsNullOrEmpty(newMember.Name))
-                            {
-                                reply.Text += $" {newMember.Name}";
-                            }
-                            reply.Text += "!";
+                            reply.Text = @"Hello!
+I can help you find pictures of people.
+You can ask me to find a picture of a person and describe them. 
+Then I should be able to find someone who looks like that!
+
+Give it a try";
                             await client.Conversations.ReplyToActivityAsync(reply);
                         }
                     }
