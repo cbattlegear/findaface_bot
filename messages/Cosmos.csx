@@ -58,11 +58,14 @@ public class Cosmos
             all_pictures.Add(new Picture(picture.faceId, picture.faceUrl, picture.faceThumbUrl));
         }
 
-        Random rand = new Random();
-
-        for (int i = 0; i < numberofpictures; i++)
+        if(all_pictures.Count() > 0)
         {
-            thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)].faceUrl);
+            Random rand = new Random();
+
+            for (int i = 0; i < numberofpictures; i++)
+            {
+                thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)].faceUrl);
+            }
         }
 
         return thumbnails;
