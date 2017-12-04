@@ -79,6 +79,29 @@ public class BasicLuisDialog : LuisDialog<object>
             
         }
 
+        EntityRecommendation emotion;
+        if (result.TryFindEntity("emotion", out emotion))
+        {
+            var our_emotion = "";
+            char[] charsToTrim = { '[', ' ', ']', '"' };
+            JArray mid = (JArray)emotion.Resolution["values"];
+
+            our_emotion = mid[0].ToString();
+            await context.PostAsync($"You sent the Emotion: {our_emotion}");
+            string query = "c.faceAttributes.emotion." + our_emotion + " > 0.9";
+            if (is_first)
+            {
+                query_build += query;
+                is_first = false;
+            }
+            else
+            {
+                query = " and " + query;
+                query_build += query;
+            }
+
+        }
+
         try
         {
             Cosmos c = new Cosmos();
