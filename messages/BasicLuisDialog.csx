@@ -99,7 +99,7 @@ public class BasicLuisDialog : LuisDialog<object>
         }
 
         EntityRecommendation age;
-        if (result.TryFindEntity("age", out age))
+        if (result.TryFindEntity("builtin.age", out age))
         {
             var our_age = "";
             JArray mid = (JArray)age.Resolution["values"];
