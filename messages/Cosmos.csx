@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.Dialogs;
@@ -37,13 +38,18 @@ public class Cosmos
 
         IQueryable <dynamic> picturequery = this.client.CreateDocumentQuery<dynamic>(
         UriFactory.CreateDocumentCollectionUri(database_name, collection_name),
-        "SELECT TOP 3 * FROM c WHERE " + whereclause,
+        "SELECT TOP 200 c.faceId, c.faceUrl, c.faceThumbUrl FROM c WHERE " + whereclause,
         queryOptions);
 
-        foreach (dynamic picture in picturequery)
-        {
-            thumbnails.Add(picture.faceUrl);
-        }
+        var picture_list = picturequery.Select(s => new { s.faceId, s.faceUrl, s.faceThumbUrl }).ToList();
+
+        Random rand = new Random();
+        // 1st Picture
+        thumbnails.Add(picture_list[rand(0, picture_list.Count() - 1)].faceUrl);
+        // 2nd Picture
+        thumbnails.Add(picture_list[rand(0, picture_list.Count() - 1)].faceUrl);
+        // 3rd Picture
+        thumbnails.Add(picture_list[rand(0, picture_list.Count() - 1)].faceUrl);
 
         return thumbnails;
     }
