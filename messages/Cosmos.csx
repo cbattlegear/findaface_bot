@@ -34,7 +34,7 @@ public class Cosmos
 
     public async Task<List<string>> ExecuteSimpleQuery(string whereclause, int numberofpictures = 0)
     {
-        List<string> thumbnails = new List<string>();
+        List<Picture> thumbnails = new List<Picture>();
         // Set some common query options
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
         string query = "";
@@ -64,7 +64,7 @@ public class Cosmos
 
             for (int i = 0; i < numberofpictures; i++)
             {
-                thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)].faceUrl);
+                thumbnails.Add(all_pictures[rand.Next(0, all_pictures.Count() - 1)]);
             }
         }
 

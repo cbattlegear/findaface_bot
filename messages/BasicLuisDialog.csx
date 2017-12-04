@@ -1,5 +1,6 @@
 #r "Newtonsoft.Json"
 #load "Cosmos.csx"
+#load "Picture.csx"
 
 using System;
 using System.Threading.Tasks;
@@ -207,7 +208,7 @@ public class BasicLuisDialog : LuisDialog<object>
         {
             Cosmos c = new Cosmos();
             c.OpenConnection().Wait();
-            List<string> thumbnails = await c.ExecuteSimpleQuery(query_build, numberofpictures);
+            List<Picture> thumbnails = await c.ExecuteSimpleQuery(query_build, numberofpictures);
             if(thumbnails.Count() == 0)
             {
                 await context.PostAsync($"I didn't find any pictures with those attributes, sorry!");
@@ -215,9 +216,9 @@ public class BasicLuisDialog : LuisDialog<object>
             {
                 await context.PostAsync($"Here's a person I found that looks like what you are asking for.");
                 var message = context.MakeMessage();
-                foreach (string thumbnail in thumbnails)
+                foreach (Picture thumbnail in thumbnails)
                 {
-                    var attachment = GetHeroCard(thumbnail);
+                    var attachment = GetHeroCard(thumbnail.faceUrl, thumbnail.faceId);
                     message.Attachments.Add(attachment);
                 }
                 await context.PostAsync(message);
@@ -227,7 +228,7 @@ public class BasicLuisDialog : LuisDialog<object>
                 var message = context.MakeMessage();
                 foreach (string thumbnail in thumbnails)
                 {
-                    var attachment = GetHeroCard(thumbnail);
+                    var attachment = GetHeroCard(thumbnail.faceUrl, thumbnail.faceId);
                     message.Attachments.Add(attachment);
                 }
                 await context.PostAsync(message);
@@ -246,10 +247,11 @@ public class BasicLuisDialog : LuisDialog<object>
         context.Wait(MessageReceived);
     }
 
-    private static Microsoft.Bot.Connector.Attachment GetHeroCard(string image_url)
+    private static Microsoft.Bot.Connector.Attachment GetHeroCard(string image_url, string id)
     {
         var heroCard = new HeroCard
         {
+            Subtitle = "Face Id: " + id,
             Images = new List<CardImage> { new CardImage(image_url) },
             Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "View Full Picture", value: image_url) }
         };
