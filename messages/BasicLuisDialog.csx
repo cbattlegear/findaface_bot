@@ -39,7 +39,10 @@ public class BasicLuisDialog : LuisDialog<object>
     [LuisIntent("Find Picture")]
     public async Task FindPicture(IDialogContext context, LuisResult result)
     {
-        await context.PostAsync($"You have reached the Find Picture intent. You said: {result.Query}"); //
+        await context.PostAsync($"You have reached the Find Picture intent. You said: {result.Query}");
+
+        string query_build = "";
+        bool is_first = true;
         EntityRecommendation gender;
         if(result.TryFindEntity("gender", out gender)) {
             var our_gender = "";
@@ -48,32 +51,10 @@ public class BasicLuisDialog : LuisDialog<object>
             JArray mid = (JArray)gender.Resolution["values"];
 
             our_gender = mid[0].ToString();
-
             await context.PostAsync($"You sent the Gender: {our_gender}");
 
-            try
-            {
-                Cosmos c = new Cosmos();
-                c.OpenConnection().Wait();
-                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.gender = '" + our_gender + "'", context);
-                var message = context.MakeMessage();
-                foreach (string thumbnail in thumbnails)
-                {
-                    var attachment = GetHeroCard(thumbnail);
-                    message.Attachments.Add(attachment);   
-                }
-                await context.PostAsync(message);
-            }
-            catch (DocumentClientException de)
-            {
-                Exception baseException = de.GetBaseException();
-                Console.WriteLine("{0} error occurred: {1}, Message: {2}", de.StatusCode, de.Message, baseException.Message);
-            }
-            catch (Exception e)
-            {
-                Exception baseException = e.GetBaseException();
-                Console.WriteLine("Error: {0}, Message: {1}", e.Message, baseException.Message);
-            }
+            query_build += "c.faceAttributes.gender = '" + our_gender + "'";
+            is_first = false;
         }
 
         EntityRecommendation haircolor;
@@ -85,34 +66,41 @@ public class BasicLuisDialog : LuisDialog<object>
 
             our_haircolor = mid[0].ToString();
             await context.PostAsync($"You sent the Hair Color: {our_haircolor}");
-
-            try
+            string query = "c.faceAttributes.hair.hairColor[0].color = '" + our_haircolor + "' and c.faceAttributes.hair.hairColor[0].confidence > 0.9";
+            if (is_first)
             {
-                Cosmos c = new Cosmos();
-                c.OpenConnection().Wait();
-                
-                List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.hair.hairColor[0].color = '" + our_haircolor + "' and c.faceAttributes.hair.hairColor[0].confidence > 0.9", context);
-
-                foreach (string thumbnail in thumbnails)
-                {
-                    var message = context.MakeMessage();
-
-                    var attachment = GetHeroCard(thumbnail);
-                    message.Attachments.Add(attachment);
-
-                    await context.PostAsync(message);
-                }
-            }
-            catch (DocumentClientException de)
+                query_build += query;
+                is_first = false;
+            } else
             {
-                Exception baseException = de.GetBaseException();
-                Console.WriteLine("{0} error occurred: {1}, Message: {2}", de.StatusCode, de.Message, baseException.Message);
+                query = " and " + query;
+                query_build += query;
             }
-            catch (Exception e)
+            
+        }
+
+        try
+        {
+            Cosmos c = new Cosmos();
+            c.OpenConnection().Wait();
+            List<string> thumbnails = await c.ExecuteSimpleQuery(query_build, context);
+            var message = context.MakeMessage();
+            foreach (string thumbnail in thumbnails)
             {
-                Exception baseException = e.GetBaseException();
-                Console.WriteLine("Error: {0}, Message: {1}", e.Message, baseException.Message);
+                var attachment = GetHeroCard(thumbnail);
+                message.Attachments.Add(attachment);
             }
+            await context.PostAsync(message);
+        }
+        catch (DocumentClientException de)
+        {
+            Exception baseException = de.GetBaseException();
+            Console.WriteLine("{0} error occurred: {1}, Message: {2}", de.StatusCode, de.Message, baseException.Message);
+        }
+        catch (Exception e)
+        {
+            Exception baseException = e.GetBaseException();
+            Console.WriteLine("Error: {0}, Message: {1}", e.Message, baseException.Message);
         }
         context.Wait(MessageReceived);
     }

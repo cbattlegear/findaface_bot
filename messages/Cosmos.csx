@@ -37,10 +37,18 @@ public class Cosmos
         List<string> thumbnails = new List<string>();
         // Set some common query options
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
+        string query = "";
+        if(whereclause == "")
+        {
+            query = "SELECT TOP 3 * FROM c";
+        } else
+        {
+            query = "SELECT TOP 3 * FROM c WHERE " + whereclause;
+        }
 
         IQueryable<dynamic> picturequery = this.client.CreateDocumentQuery<dynamic>(
         UriFactory.CreateDocumentCollectionUri(database_name, collection_name),
-        "SELECT TOP 3 * FROM c WHERE " + whereclause,
+        query,
         queryOptions);
 
         foreach (dynamic picture in picturequery)
