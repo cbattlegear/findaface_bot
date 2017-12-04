@@ -32,7 +32,7 @@ public class Cosmos
         
     }
 
-    public async Task<List<string>> ExecuteSimpleQuery(string whereclause, int numberofpictures = 0)
+    public async Task<List<Picture>> ExecuteSimpleQuery(string whereclause, int numberofpictures = 0)
     {
         List<Picture> thumbnails = new List<Picture>();
         // Set some common query options
