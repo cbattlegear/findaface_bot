@@ -61,7 +61,7 @@ public class BasicLuisDialog : LuisDialog<object>
             JArray mid = (JArray)gender.Resolution["values"];
 
             our_gender = mid[0].ToString();
-            await context.PostAsync($"You sent the Gender: {our_gender}");
+            //await context.PostAsync($"You sent the Gender: {our_gender}");
 
             query_build += "c.faceAttributes.gender = '" + our_gender + "'";
             is_first = false;
@@ -74,7 +74,7 @@ public class BasicLuisDialog : LuisDialog<object>
             JArray mid = (JArray)haircolor.Resolution["values"];
 
             our_haircolor = mid[0].ToString();
-            await context.PostAsync($"You sent the Hair Color: {our_haircolor}");
+            //await context.PostAsync($"You sent the Hair Color: {our_haircolor}");
             string query = "c.faceAttributes.hair.hairColor[0].color = '" + our_haircolor + "' and c.faceAttributes.hair.hairColor[0].confidence > 0.9";
             if (is_first)
             {
@@ -95,7 +95,7 @@ public class BasicLuisDialog : LuisDialog<object>
             JArray mid = (JArray)emotion.Resolution["values"];
 
             our_emotion = mid[0].ToString();
-            await context.PostAsync($"You sent the Emotion: {our_emotion}");
+            //await context.PostAsync($"You sent the Emotion: {our_emotion}");
             string query = "c.faceAttributes.emotion." + our_emotion + " > 0.9";
             if (is_first)
             {
@@ -119,7 +119,7 @@ public class BasicLuisDialog : LuisDialog<object>
             our_age = age.Resolution["value"].ToString();
 
             //our_age = mid[0].ToString();
-            await context.PostAsync($"You sent the Age: {our_age}");
+            //await context.PostAsync($"You sent the Age: {our_age}");
             int int_age = Convert.ToInt32(our_age);
             string query = "c.faceAttributes.age >= " + (int_age - 2).ToString() + " and c.faceAttributes.age <= " + (int_age + 2).ToString();
             if (is_first)
@@ -211,8 +211,19 @@ public class BasicLuisDialog : LuisDialog<object>
             if(thumbnails.Count() == 0)
             {
                 await context.PostAsync($"I didn't find any pictures with those attributes, sorry!");
+            } else if(thumbnails.Count() == 1)
+            {
+                await context.PostAsync($"Here's a person I found that looks like what you are asking for.");
+                var message = context.MakeMessage();
+                foreach (string thumbnail in thumbnails)
+                {
+                    var attachment = GetHeroCard(thumbnail);
+                    message.Attachments.Add(attachment);
+                }
+                await context.PostAsync(message);
             } else
             {
+                await context.PostAsync($"Here's a few people I found that look like what you are asking for.");
                 var message = context.MakeMessage();
                 foreach (string thumbnail in thumbnails)
                 {
