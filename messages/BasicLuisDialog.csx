@@ -121,6 +121,23 @@ public class BasicLuisDialog : LuisDialog<object>
 
         }
 
+        EntityRecommendation bald;
+        if (result.TryFindEntity("bald", out bald))
+        {
+            string query = "c.faceAttributes.hair.bald >= 0.9";
+            if (is_first)
+            {
+                query_build += query;
+                is_first = false;
+            }
+            else
+            {
+                query = " and " + query;
+                query_build += query;
+            }
+
+        }
+
         try
         {
             Cosmos c = new Cosmos();
