@@ -102,6 +102,30 @@ public class BasicLuisDialog : LuisDialog<object>
 
         }
 
+        EntityRecommendation age;
+        if (result.TryFindEntity("age", out age))
+        {
+            var our_age = "";
+            char[] charsToTrim = { '[', ' ', ']', '"' };
+            JArray mid = (JArray)age.Resolution["values"];
+
+            our_age = mid[0].ToString();
+            await context.PostAsync($"You sent the Age: {our_age}");
+            int int_age = Convert.ToInt32(our_age);
+            string query = "c.faceAttributes.age > " + (int_age - 2).ToString() + " and c.faceAttributes.age < " + (int_age - 2).ToString();
+            if (is_first)
+            {
+                query_build += query;
+                is_first = false;
+            }
+            else
+            {
+                query = " and " + query;
+                query_build += query;
+            }
+
+        }
+
         try
         {
             Cosmos c = new Cosmos();
