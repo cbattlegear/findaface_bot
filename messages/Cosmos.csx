@@ -37,27 +37,16 @@ public class Cosmos
         List<string> thumbnails = new List<string>();
         // Set some common query options
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
-        await context.PostAsync($"Running query");
-        IQueryable <Picture> picturequery = this.client.CreateDocumentQuery<Picture>(
+
+        IQueryable<dynamic> picturequery = this.client.CreateDocumentQuery<dynamic>(
         UriFactory.CreateDocumentCollectionUri(database_name, collection_name),
-        "SELECT TOP 200 c.faceId, c.faceUrl, c.faceThumbUrl FROM c WHERE " + whereclause,
+        "SELECT TOP 3 * FROM c WHERE " + whereclause,
         queryOptions);
 
-        var picture_list = picturequery.Select(s => new { s.faceId, s.faceUrl, s.faceThumbUrl }).ToList();
-        await context.PostAsync($"Converted to list with {picture_list.Count()} pictures");
-        Random rand = new Random();
-        // 1st Picture
-        int rand_pic1 = rand.Next(0, picture_list.Count() - 1);
-        thumbnails.Add(picture_list[rand_pic1].faceUrl);
-        await context.PostAsync($"Added Picture number {rand_pic1}");
-        // 2nd Picture
-        int rand_pic2 = rand.Next(0, picture_list.Count() - 1);
-        thumbnails.Add(picture_list[rand_pic2].faceUrl);
-        await context.PostAsync($"Added Picture number {rand_pic2}");
-        // 3rd Picture
-        int rand_pic3 = rand.Next(0, picture_list.Count() - 1);
-        thumbnails.Add(picture_list[rand_pic3].faceUrl);
-        await context.PostAsync($"Added Picture number {rand_pic3}");
+        foreach (dynamic picture in picturequery)
+        {
+            thumbnails.Add(picture.faceUrl);
+        }
 
         return thumbnails;
     }
