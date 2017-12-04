@@ -37,14 +37,14 @@ public class Cosmos
         List<string> thumbnails = new List<string>();
         // Set some common query options
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
-
+        await context.PostAsync($"Running query");
         IQueryable <Picture> picturequery = this.client.CreateDocumentQuery<Picture>(
         UriFactory.CreateDocumentCollectionUri(database_name, collection_name),
         "SELECT TOP 200 c.faceId, c.faceUrl, c.faceThumbUrl FROM c WHERE " + whereclause,
         queryOptions);
 
         var picture_list = picturequery.Select(s => new { s.faceId, s.faceUrl, s.faceThumbUrl }).ToList();
-
+        await context.PostAsync($"Converted to list with {picture_list.Count()} pictures");
         Random rand = new Random();
         // 1st Picture
         int rand_pic1 = rand.Next(0, picture_list.Count() - 1);
