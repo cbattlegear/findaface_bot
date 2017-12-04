@@ -30,7 +30,7 @@ public class BasicLuisDialog : LuisDialog<object>
     [LuisIntent("None")]
     public async Task NoneIntent(IDialogContext context, LuisResult result)
     {
-        await context.PostAsync($"Currently I can find men or women by age, hair color, if they are blad, if they have glasses, are smiling, or the emotion on their face"); //
+        await context.PostAsync($"Currently I can find men or women by age, hair color, if they are bald, if they have glasses, are smiling, or the emotion on their face"); //
         context.Wait(MessageReceived);
     }
 
