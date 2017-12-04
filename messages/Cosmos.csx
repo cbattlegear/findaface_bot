@@ -47,11 +47,17 @@ public class Cosmos
 
         Random rand = new Random();
         // 1st Picture
-        thumbnails.Add(picture_list[rand.Next(0, picture_list.Count() - 1)].faceUrl);
+        int rand_pic1 = rand.Next(0, picture_list.Count() - 1);
+        thumbnails.Add(picture_list[rand_pic1].faceUrl);
+        await context.PostAsync($"Added Picture number {rand_pic1}");
         // 2nd Picture
-        thumbnails.Add(picture_list[rand.Next(0, picture_list.Count() - 1)].faceUrl);
+        int rand_pic2 = rand.Next(0, picture_list.Count() - 1);
+        thumbnails.Add(picture_list[rand_pic2].faceUrl);
+        await context.PostAsync($"Added Picture number {rand_pic2}");
         // 3rd Picture
-        thumbnails.Add(picture_list[rand.Next(0, picture_list.Count() - 1)].faceUrl);
+        int rand_pic3 = rand.Next(0, picture_list.Count() - 1);
+        thumbnails.Add(picture_list[rand_pic3].faceUrl);
+        await context.PostAsync($"Added Picture number {rand_pic3}");
 
         return thumbnails;
     }
