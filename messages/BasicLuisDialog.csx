@@ -41,23 +41,6 @@ public class BasicLuisDialog : LuisDialog<object>
     public async Task FindPicture(IDialogContext context, LuisResult result)
     {
         int numberofpictures = 1;
-        EntityRecommendation number;
-        if (result.TryFindEntity("builtin.number", out number))
-        {
-            var our_number = "";
-            //JArray mid = (JArray)age.Resolution["values"];
-
-            our_number = number.Resolution["value"].ToString();
-
-            //our_age = mid[0].ToString();
-            
-            numberofpictures = Convert.ToInt32(our_number);
-            if(numberofpictures > 5)
-            {
-                await context.PostAsync($"Woah there, 5 or less pictures please.");
-                return;
-            }
-        }
 
         string query_build = "";
         bool is_first = true;
