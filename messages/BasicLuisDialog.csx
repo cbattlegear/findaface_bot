@@ -108,7 +108,7 @@ public class BasicLuisDialog : LuisDialog<object>
 
             //our_age = mid[0].ToString();
             await context.PostAsync($"You sent the Age: {our_age}");
-            /* int int_age = Convert.ToInt32(our_age);
+            int int_age = Convert.ToInt32(our_age);
             string query = "c.faceAttributes.age > " + (int_age - 2).ToString() + " and c.faceAttributes.age < " + (int_age - 2).ToString();
             if (is_first)
             {
@@ -119,7 +119,7 @@ public class BasicLuisDialog : LuisDialog<object>
             {
                 query = " and " + query;
                 query_build += query;
-            } */
+            }
 
         }
 
