@@ -56,16 +56,13 @@ public class BasicLuisDialog : LuisDialog<object>
                 Cosmos c = new Cosmos();
                 c.OpenConnection().Wait();
                 List<string> thumbnails = await c.ExecuteSimpleQuery("c.faceAttributes.gender = '" + our_gender + "'", context);
-
-                foreach(string thumbnail in thumbnails)
+                var message = context.MakeMessage();
+                foreach (string thumbnail in thumbnails)
                 {
-                    var message = context.MakeMessage();
-
                     var attachment = GetHeroCard(thumbnail);
-                    message.Attachments.Add(attachment);
-
-                    await context.PostAsync(message);
+                    message.Attachments.Add(attachment);   
                 }
+                await context.PostAsync(message);
             }
             catch (DocumentClientException de)
             {
