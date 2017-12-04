@@ -1,3 +1,5 @@
+#load "Picture.csx"
+
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -36,7 +38,7 @@ public class Cosmos
         // Set some common query options
         FeedOptions queryOptions = new FeedOptions { MaxItemCount = 5 };
 
-        IQueryable <dynamic> picturequery = this.client.CreateDocumentQuery<dynamic>(
+        IQueryable <Picture> picturequery = this.client.CreateDocumentQuery<Picture>(
         UriFactory.CreateDocumentCollectionUri(database_name, collection_name),
         "SELECT TOP 200 c.faceId, c.faceUrl, c.faceThumbUrl FROM c WHERE " + whereclause,
         queryOptions);
@@ -45,11 +47,11 @@ public class Cosmos
 
         Random rand = new Random();
         // 1st Picture
-        thumbnails.Add(picture_list[rand(0, picture_list.Count() - 1)].faceUrl);
+        thumbnails.Add(picture_list[rand.Next(0, picture_list.Count() - 1)].faceUrl);
         // 2nd Picture
-        thumbnails.Add(picture_list[rand(0, picture_list.Count() - 1)].faceUrl);
+        thumbnails.Add(picture_list[rand.Next(0, picture_list.Count() - 1)].faceUrl);
         // 3rd Picture
-        thumbnails.Add(picture_list[rand(0, picture_list.Count() - 1)].faceUrl);
+        thumbnails.Add(picture_list[rand.Next(0, picture_list.Count() - 1)].faceUrl);
 
         return thumbnails;
     }
